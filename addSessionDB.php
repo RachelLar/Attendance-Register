@@ -13,27 +13,25 @@ include ('includes/header.html');
 require ('mysqli_connect.php');
 
 //$attendance_id    = $_GET['attend_id']; // it will allow the database to generate the auto_increment.
-$p1   = $_GET['parent_fname'];
-$p2   = $_GET['parent_lname'];
-$pt   = $_GET['parent_tel'];
-$pe   = $_GET['email'];
-$rel   = $_GET['relationship'];
+$day   = $_GET['day'];
+$time   = $_GET['time'];
 $student_id   = $_GET['student_id'];
-
-
+//$slot_id   = $_GET['slot_id'];
 
 // to extract only the volunteerID (five characters), and not considering the name of the volunteer in order to store it into the database
-$student_id	   = substr($student_id,0,5);
+$student_id    = substr($student_id,0,5);
+
+// to extract only the volunteerID (five characters), and not considering the name of the volunteer in order to store it into the database
+//$slot_id	   = substr($slot_id,0,8);
 
 // set up the query using the values that were passed via the URL from the form
-$query = "INSERT INTO parent (student_id, parent_fname, parent_lname, parent_tel, email, relationship) VALUES (".$student_id.",'".$p1."','".$p2."',".$pt.",'".$pe."','".$rel."')";
-echo $query;
+$query = "INSERT INTO addSessionView (day, time, student_id) VALUES ('".$day."','".$time."',".$student_id.")";
+//echo $query;
 
 // execute the query
        $results = mysqli_query($dbc, $query); 
-	   echo $query;
 	   
-	    if ($p1 && $p2 && $pt && $pe && $rel)  // Then, IF everything is set correctly
+	    if ($day && $time && $student_id)  // Then, IF everything is set correctly
 		 
 		  {
                                             // This will finish the page
@@ -46,6 +44,10 @@ echo $query;
 										mysqli_close($dbc);
 
 										
+// jump to the next page
 
+//$strval= 'Location:registerDB.php?slot_id='.$slot_id;
+//echo $strval;
+//header( $strval );
 
 	include ('includes/footer.html'); ?>

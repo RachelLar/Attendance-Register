@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') // This handles the form
             } 
         else 
             {
-                echo '<div class="alert alert-danger" role="alert"><p class="error">Please enter the Course Title!</p></div>';
+                echo '<div class="alert alert-danger" role="alert"><p class="error">Please enter the session Title!</p></div>';
             }    
  
     // This will check for the first unit title 
@@ -256,20 +256,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') // This handles the form
             { // Then, IF everything is set correctly
 
 		// This will make sure the email address is available
-		$q = "SELECT course_id FROM course WHERE course_title='$ct'";
+		$q = "SELECT session_id FROM session WHERE session_title='$ct'";
 		$r = mysqli_query ($dbc, $q) or trigger_error("Query: $q\n<br />MySQL Error: " . mysqli_error($dbc));
 		
 		if (mysqli_num_rows($r) == 0) 
                     { // IF available.
                         // This will set up the query using the values that were passed via the URL from the form
                         // This uses prepared statements to improve security			
-                        $query1 = $dbc->prepare("INSERT INTO course (course_title) VALUES ( ? )");
+                        $query1 = $dbc->prepare("INSERT INTO session (session_title) VALUES ( ? )");
                         // This will bind the variables to the statement
                         $query1->bind_param('s', $ct);
                         // This will execute the statement
                         $query1->execute( );
 //--------------------------------------------------------------------------------
-                        // This will store the last value of LAST_INSERT_ID() for the Course ID here
+                        // This will store the last value of LAST_INSERT_ID() for the session ID here
                         $queryLCID = $dbc->prepare( "SELECT LAST_INSERT_ID()" );
                         $queryLCID->execute();
                         $result = $queryLCID->get_result();
@@ -279,8 +279,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') // This handles the form
                         //echo ($lastcid);
                         //print_r( $lastcid);                                            
 //--------------------------------------------------------------------------------
-                        // This will Prepare Query Two - Inserting into the unit row, the first unit_title, and the course_course_id)
-                        $query2 = $dbc->prepare("INSERT INTO unit (unit_title, course_course_id) VALUES ( ?, ? )" );
+                        // This will Prepare Query Two - Inserting into the unit row, the first unit_title, and the session_session_id)
+                        $query2 = $dbc->prepare("INSERT INTO unit (unit_title, session_session_id) VALUES ( ?, ? )" );
                         // This will bind the variables to the statement
                         $query2->bind_param('si', $ut1, $lastcid);
                         // This will execute the statement
@@ -317,8 +317,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') // This handles the form
                         // This will execute the statement
                         $query5->execute( );						
 //----------Add Second Unit/Topic info--------------------------------------------				
-                        // This will Prepare Query Two - Inserting into the second unit table, the unit_title, and the course_course_id)
-                        $query6 = $dbc->prepare("INSERT INTO unit (unit_title, course_course_id) VALUES ( ?, ? )" );
+                        // This will Prepare Query Two - Inserting into the second unit table, the unit_title, and the session_session_id)
+                        $query6 = $dbc->prepare("INSERT INTO unit (unit_title, session_session_id) VALUES ( ?, ? )" );
                         // This will bind the variables to the statement
                         $query6->bind_param('si', $ut2, $lastcid);
                         // This will execute the statement
@@ -355,8 +355,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') // This handles the form
                         // This will execute the statement
                         $query9->execute( );				
 //----------Add Third Unit/Topic info---------------------------------------------				
-                        // This will Prepare Query Two - Inserting into the third unit table, the unit_title, and the course_course_id)
-                        $query10 = $dbc->prepare("INSERT INTO unit (unit_title, course_course_id) VALUES ( ?, ? )" );
+                        // This will Prepare Query Two - Inserting into the third unit table, the unit_title, and the session_session_id)
+                        $query10 = $dbc->prepare("INSERT INTO unit (unit_title, session_session_id) VALUES ( ?, ? )" );
                         // This will bind the variables to the statement
                         $query10->bind_param('si', $ut3, $lastcid);
                         // This will execute the statement
@@ -397,18 +397,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') // This handles the form
 			if (mysqli_affected_rows($dbc) >= 1)  // If it ran OK.
                             {
                                 // This will finish the page
-                                echo '<div class="alert alert-success" role="alert"><h3>The Course and its Units and Topics have been added.</h3></div>';
+                                echo '<div class="alert alert-success" role="alert"><h3>The session and its Units and Topics have been added.</h3></div>';
                                 include ('includes/footer.html'); // Include the HTML footer.
                                 exit(); // Stop the page.
                             } 
                         else 
                             { // ELSE, if it did not run correctly
-				echo '<div class="alert alert-danger" role="alert"><p class="error">The Course and its Units and Topics could not be added due to a system error. We apologize for any inconvenience.</p></div>';
+				echo '<div class="alert alert-danger" role="alert"><p class="error">The session and its Units and Topics could not be added due to a system error. We apologize for any inconvenience.</p></div>';
                             }			
                     } 
                     else 
                         { //  ELSE, it will advise the email address is not available
-                            echo '<div class="alert alert-danger" role="alert"><p class="error">That Course name has already been used.</p></div>';
+                            echo '<div class="alert alert-danger" role="alert"><p class="error">That session name has already been used.</p></div>';
                         }		
 	} 
         else 
@@ -426,15 +426,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') // This handles the form
             <div class="row">
                 <div class="col-lg-12 scheme2"> 
                     <div class="formbox_register clearfix text-center">
-                    <h1>Add a Course</h1> 
-                    <p>All fields must be completed to add the course.</p>
+                    <h1>Add a session</h1> 
+                    <p>All fields must be completed to add the session.</p>
                     <p>Please Note: Resources for each Topic can be added once the Topic has been created.</p>
                     <hr>
-                        <form class="form-group" role="form" action="add_course.php" method="post">
+                        <form class="form-group" role="form" action="add_session.php" method="post">
                             <div class ="col-lg-12">
-                                <h3>The Course</h3>
+                                <h3>The session</h3>
                                 <div class="form-group form-group-md">
-                                   <input type="text" name="course_title" placeholder="Course Title" class="form-control input-md  text-center" id="inputName" size="30" maxlength="30" value="<?php if (isset($trimmed['course_title'])) echo $trimmed['course_title']; ?>" />
+                                   <input type="text" name="session_title" placeholder="session Title" class="form-control input-md  text-center" id="inputName" size="30" maxlength="30" value="<?php if (isset($trimmed['session_title'])) echo $trimmed['session_title']; ?>" />
                                 </div>							
                             </div>
 
@@ -516,7 +516,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') // This handles the form
                                     <h3>Please check all information carefully before submitting</h3>
                                     <br />     
                                     <div class="form-group form-group-lg" align="center">                 
-                                       <button type="submit" name="submit" value="Register" class="btn btn-primary btn-lg btn-block">Add Course</button>
+                                       <button type="submit" name="submit" value="Register" class="btn btn-primary btn-lg btn-block">Add session</button>
                                     </div>                                
                                 </div>                 
                         </form>
